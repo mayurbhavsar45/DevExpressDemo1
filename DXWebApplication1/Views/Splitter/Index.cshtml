@@ -1,0 +1,48 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        $('#home').click(function () {
+            splClientSideAPI.GetPaneByName('Main').SetContentUrl("/FilterBuilder/Index");
+        });
+        $('#filter').click(function () {
+            splClientSideAPI.GetPaneByName('Main').SetContentUrl("/FilterBuilder/FilterBuilder");
+        });
+    });
+</script>
+
+<style type="text/css">
+    .leftmenu { cursor: pointer; padding: 5px; }
+</style>
+
+@Html.DevExpress().Splitter(
+    settings =>
+    {
+        settings.Name = "splClientSideAPI";
+        settings.Height = 600;
+        settings.Width = Unit.Percentage(100);
+
+        settings.Panes.Add(navigationPane =>
+        {
+            navigationPane.ScrollBars = ScrollBars.Auto;
+            navigationPane.Size = Unit.Percentage(20);
+            navigationPane.SetContent(() =>
+            {
+                ViewContext.Writer.Write(
+                    "<div id=\"home\" class=\"leftmenu\" value=\"/FilterBuilder/Index\">WELCOME</div>" +
+                    "<div id=\"filter\" class=\"leftmenu\" value=\"/FilterBuilder/FilterBuilder\">FILTER GRIDVIEW</div>"
+                );
+            });
+        });
+        settings.Panes.Add(contentPane =>
+        {
+            contentPane.Name = "Main";
+            contentPane.ScrollBars = ScrollBars.Auto;
+            //contentPane.SetContent(() =>
+            //{
+            //    ViewContext.Writer.Write(
+            //        "right pane 1"
+            //    );
+            //});
+            contentPane.ContentUrl = DevExpressHelper.GetUrl(new { Controller = "FilterBuilder", Action = "Index" });
+        });
+
+    }).GetHtml()
